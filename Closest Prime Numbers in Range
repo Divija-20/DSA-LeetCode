@@ -1,0 +1,25 @@
+class Solution {
+    public int[] closestPrimes(int left, int right) {
+        boolean[] composite = new boolean[right + 1];
+        composite[0] = composite[1] = true;
+
+        for (int i = 2; i * i <= right; i++)
+            if (!composite[i])
+                for (int j = i * i; j <= right; j += i)
+                    composite[j] = true;
+
+        int prev = -1, minDiff = Integer.MAX_VALUE;
+        int[] ans = {-1, -1};
+
+        for (int i = left; i <= right; i++) {
+            if (!composite[i]) {
+                if (prev != -1 && i - prev < minDiff) {
+                    minDiff = i - prev;
+                    ans = new int[]{prev, i};
+                }
+                prev = i;
+            }
+        }
+        return ans;
+    }
+}
